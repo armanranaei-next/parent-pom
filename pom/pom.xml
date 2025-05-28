@@ -1,32 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    
-    <parent> <!--Parent: BOM -->
+
+    <parent> <!--Parent:
+        BOM -->
         <groupId>d5986291-d221-4579-b2de-b3c3b5371f38</groupId>
-        <artifactId>notification-service-BOM</artifactId>
-        <version>2.1.4</version>
+        <artifactId>mule-common-bom</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>d5986291-d221-4579-b2de-b3c3b5371f38</groupId>
-    <artifactId>parent-pom</artifactId>
-    <version>2.1.4</version>
+    <artifactId>mule-common-parent-pom</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>parent-pom</name>
+    <name>mule-common-parent-pom</name>
 
     <properties>
         <orgid>d5986291-d221-4579-b2de-b3c3b5371f38</orgid>
         <type>custom</type>
-        
-        <!-- Visualiser properties -->
-        <api.layer.eapi>Experience</api.layer.eapi>
-        <api.layer.papi>Process</api.layer.papi>
-        <api.layer.sapi>System</api.layer.sapi>
-        <api.layer.none>None</api.layer.none>
-        <!--  ************************* -->
     </properties>
+
     <build>
         <resources>
             <resource>
@@ -42,17 +38,17 @@
         </testResources>
         <plugins>
             <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <configuration>
-                        <nonFilteredFileExtensions>
-                            <nonFilteredFileExtension>p12</nonFilteredFileExtension>
-                            <nonFilteredFileExtension>crt</nonFilteredFileExtension>
-                            <nonFilteredFileExtension>pem</nonFilteredFileExtension>
-                        </nonFilteredFileExtensions>
-                    </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>p12</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>crt</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>pem</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
             </plugin>
-                <!-- MUnit -->
+            <!-- MUnit -->
             <plugin>
                 <groupId>com.mulesoft.munit.tools</groupId>
                 <artifactId>munit-maven-plugin</artifactId>
@@ -112,11 +108,42 @@
                 <groupId>org.mule.tools.maven</groupId>
                 <artifactId>mule-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <classifier>mule-application</classifier>
+                    <cloudhub2Deployment>
+                        <uri>https://eu1.anypoint.mulesoft.com</uri>
+                        <server>anypoint-exchange-etoro-v3</server>
+                        <provider>MC</provider>
+                        <target>${CICD.deploy.target}</target>
+                        <businessGroupId>${CICD.deploy.groupId}</businessGroupId>
+                        <environment>${CICD.deploy.environment}</environment>
+                        <releaseChannel>${CICD.deploy.releaseChannel}</releaseChannel>
+                        <muleVersion>${CICD.deploy.muleVersion}</muleVersion>
+                        <replicas>${CICD.deploy.replicas}</replicas>
+                        <vCores>${CICD.deploy.vCores}</vCores>
+                        <javaVersion>${CICD.deploy.javaVersion}</javaVersion>
+                        <applicationName>${project.name}${CICD.deploy.postfixAppName}</applicationName>
+                        <deploymentSettings>
+                            <generateDefaultPublicUrl>false</generateDefaultPublicUrl>
+                            <updateStrategy>${CICD.deploy.updateStrategy}</updateStrategy>
+                        </deploymentSettings>
+                        <properties>
+                            <mule.env>${CICD.mule.env}</mule.env>
+                            <anypoint.platform.base_uri>https://eu1.anypoint.mulesoft.com</anypoint.platform.base_uri>
+                            <anypoint.platform.client_id>${CICD.anypoint.platform.client_id}</anypoint.platform.client_id>
+                            <anypoint.platform.config.analytics.agent.enabled>${mule.visualizer.enable}</anypoint.platform.config.analytics.agent.enabled>
+                            <anypoint.platform.visualizer.layer>${mule.api.layer}</anypoint.platform.visualizer.layer>
+                        </properties>
+                        <secureProperties>
+                            <anypoint.platform.client_secret>${CICD.anypoint.platform.client_secret}</anypoint.platform.client_secret>
+                        </secureProperties>                            
+                    </cloudhub2Deployment>
+                </configuration>
             </plugin>
         </plugins>
     </build>
-	
-	<dependencies>
+
+    <dependencies>
         <dependency>
             <groupId>org.mule.connectors</groupId>
             <artifactId>mule-http-connector</artifactId>
@@ -127,22 +154,6 @@
             <artifactId>mule-sockets-connector</artifactId>
             <classifier>mule-plugin</classifier>
         </dependency>
-        <dependency>
-            <groupId>com.mulesoft.modules</groupId>
-            <artifactId>mule-secure-configuration-property-module</artifactId>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-        <dependency>
-            <groupId>${orgid}</groupId>
-            <artifactId>json-logger</artifactId>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-        <dependency>
-            <groupId>${orgid}</groupId>
-            <artifactId>error-handler-plugin</artifactId>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-
         <dependency>
             <groupId>com.mulesoft.munit</groupId>
             <artifactId>munit-runner</artifactId>
@@ -160,11 +171,42 @@
             <artifactId>assertions</artifactId>
             <scope>test</scope>
         </dependency>
-		<dependency>
-			<groupId>com.mulesoft.module</groupId>
-			<artifactId>mule4-azure-key-vault-properties-provider</artifactId>
-			<classifier>mule-plugin</classifier>
-		</dependency>
-	</dependencies>
-    
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>CH2_PUBLIC</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.mule.tools.maven</groupId>
+                        <artifactId>mule-maven-plugin</artifactId>
+                        <configuration>
+                            <cloudhub2Deployment>
+                                <deploymentSettings>
+                                    <http>
+                                        <inbound>
+                                            <publicUrl>
+                                                https://${CICD.PUBLIC.host}/${project.name}${CICD.deploy.postfixAppName}</publicUrl>
+                                            <lastMileSecurity>false</lastMileSecurity>
+                                            <forwardSslSession>false</forwardSslSession>
+                                        </inbound>
+                                    </http>
+                                </deploymentSettings>
+                            </cloudhub2Deployment>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <distributionManagement>
+        <repository>
+            <id>anypoint-exchange-v3</id>
+            <name>Corporate Repository</name>
+            <url>https://maven.eu1.anypoint.mulesoft.com/api/v3/organizations/d5986291-d221-4579-b2de-b3c3b5371f38/maven</url>
+            <layout>default</layout>
+        </repository>
+    </distributionManagement>
 </project>
