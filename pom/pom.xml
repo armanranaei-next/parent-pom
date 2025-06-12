@@ -131,12 +131,13 @@
                             <mule.env>${CICD.mule.env}</mule.env>
                             <anypoint.platform.base_uri>https://eu1.anypoint.mulesoft.com</anypoint.platform.base_uri>
                             <anypoint.platform.client_id>${CICD.anypoint.platform.client_id}</anypoint.platform.client_id>
-                            <anypoint.platform.config.analytics.agent.enabled>${mule.visualizer.enable}</anypoint.platform.config.analytics.agent.enabled>
+                            <anypoint.platform.config.analytics.agent.enabled>
+                                ${mule.visualizer.enable}</anypoint.platform.config.analytics.agent.enabled>
                             <anypoint.platform.visualizer.layer>${mule.api.layer}</anypoint.platform.visualizer.layer>
                         </properties>
                         <secureProperties>
                             <anypoint.platform.client_secret>${CICD.anypoint.platform.client_secret}</anypoint.platform.client_secret>
-                        </secureProperties>                            
+                        </secureProperties>
                     </cloudhub2Deployment>
                 </configuration>
             </plugin>
@@ -147,6 +148,11 @@
         <dependency>
             <groupId>org.mule.connectors</groupId>
             <artifactId>mule-http-connector</artifactId>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-apikit-module</artifactId>
             <classifier>mule-plugin</classifier>
         </dependency>
         <dependency>
